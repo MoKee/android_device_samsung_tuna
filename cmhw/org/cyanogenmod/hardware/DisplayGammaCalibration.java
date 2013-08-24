@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 The MoKee OpenSource Project
+ * Copyright (C) 2013 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package org.mokee.hardware;
+package org.cyanogenmod.hardware;
 
-import org.mokee.hardware.util.FileUtils;
+import org.cyanogenmod.hardware.util.FileUtils;
 import java.io.File;
 
-public class DisplayColorCalibration {
-    private static final String[] FILE_PATH = new String[] {
-            "/sys/class/misc/samoled_color/red_multiplier",
-            "/sys/class/misc/samoled_color/green_multiplier",
-            "/sys/class/misc/samoled_color/blue_multiplier"
+public class DisplayGammaCalibration {
+    private static final String[] GAMMA_FILE_PATH = new String[] {
+            "/sys/class/misc/samoled_color/red_v1_offset",
+            "/sys/class/misc/samoled_color/green_v1_offset",
+            "/sys/class/misc/samoled_color/blue_v1_offset"
     };
 
     public static boolean isSupported() {
-        for (String filePath : FILE_PATH) {
+        for (String filePath : GAMMA_FILE_PATH) {
             if (!new File(filePath).exists()) {
                 return false;
             }
@@ -35,27 +35,31 @@ public class DisplayColorCalibration {
         return true;
     }
 
+    public static int getNumberOfControls() {
+        return 1;
+    }
+
     public static int getMaxValue()  {
-        return 2000000000;
+        return 20;
     }
 
     public static int getMinValue()  {
-        return 0;
+        return -20;
     }
 
-    public static String getCurColors()  {
+    public static String getCurGamma(int control) {
         StringBuilder values = new StringBuilder();
-        for (String filePath : FILE_PATH) {
+        for (String filePath : GAMMA_FILE_PATH) {
             values.append(FileUtils.readOneLine(filePath)).append(" ");
         }
         return values.toString();
     }
 
-    public static boolean setColors(String colors)  {
-        String[] valuesSplit = colors.split(" ");
+    public static boolean setGamma(int control, String gamma) {
+        String[] valuesSplit = gamma.split(" ");
         boolean result = true;
         for (int i = 0; i < valuesSplit.length; i++) {
-            String targetFile = FILE_PATH[i];
+            String targetFile = GAMMA_FILE_PATH[i];
             result &= FileUtils.writeLine(targetFile, valuesSplit[i]);
         }
         return result;
