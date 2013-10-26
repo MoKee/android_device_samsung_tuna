@@ -115,6 +115,3 @@ BOARD_SEPOLICY_UNION := \
         genfs_contexts \
         file_contexts
 
-ifdef MK_RELEASE
-WITH_DEXPREOPT := true
-endif
