@@ -50,7 +50,8 @@ PRODUCT_PACKAGES += \
 # Audio
 PRODUCT_PACKAGES += \
 	audio.a2dp.default \
-	audio.usb.default
+	audio.usb.default \
+	audio.r_submix.default
 
 PRODUCT_COPY_FILES += \
 	$(DEVICE_FOLDER)/prebuilt/etc/audio_policy.conf:system/etc/audio_policy.conf \
@@ -198,10 +199,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	e2fsck \
 	setup_fs
-
-# Don't preload EGL drivers in Zygote at boot time
-PRODUCT_PROPERTY_OVERRIDES += \
-	ro.zygote.disable_gl_preload=true
 
 $(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
 
